@@ -28,8 +28,12 @@ import sys
 PLIST = os.path.expanduser("~/Library/Preferences/com.googlecode.iterm2.plist")
 IDENTS = (b"com.pmi.claude.ratelimits", b"com.pmi.claude.model", b"com.pmi.claude.effort")
 
-PRIORITY = 20.0
-COMPRESSION_RESISTANCE = 10
+# Balanced: just above internal components (which sit at priority 5 /
+# compression 1) so the Claude components aren't the first to vanish — but NOT
+# so high that they grab all the slack and render super-wide while internal
+# components get squeezed to nothing. Sized to content, like the internal ones.
+PRIORITY = 6.0
+COMPRESSION_RESISTANCE = 1
 MINWIDTH = 0
 
 
