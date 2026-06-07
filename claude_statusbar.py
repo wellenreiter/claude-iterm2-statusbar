@@ -112,7 +112,7 @@ async def main(connection):
          "🧠 High", "com.pmi.claude.effort", render_effort),
     ]
 
-    first = {"done": False}
+    poll_counts = {}
 
     for short_desc, detail, exemplar, ident, fn in specs:
         component = iterm2.StatusBarComponent(
@@ -124,17 +124,24 @@ async def main(connection):
             identifier=ident,
         )
 
-        def make_cb(render_fn, name):
-            @iterm2.StatusBarRPC
-            async def callback(knobs):
+        def make_cb(render_fn, name, ident):
+            async def _cb(knobs):
+                # Per-component poll log (first 3 each, with timestamps).
+                # A component polled only once = registered but NOT displayed
+                # (compressed out). Polled repeatedly = bound & visible.
                 val = render_fn()
-                if not first["done"]:
-                    log(f"FIRST callback ({name}) -> {val!r}  (==> BOUND & RENDERING)")
-                    first["done"] = True
+                n = poll_counts.get(name, 0) + 1
+                poll_counts[name] = n
+                if n <= 3:
+                    log(f"poll #{n} [{name}] -> {val!r}")
                 return val
-            return callback
+            # iTerm2 identifies an RPC by the callback's __name__. Three
+            # callbacks all named the same collide into one RPC, so every
+            # component renders the first-registered one's value. Unique names.
+            _cb.__name__ = "claude_sb_" + ident.replace(".", "_").replace("-", "_")
+            return iterm2.StatusBarRPC(_cb)
 
-        await component.async_register(connection, make_cb(fn, short_desc))
+        await component.async_register(connection, make_cb(fn, short_desc, ident))
         log(f"registered {ident}")
 
 
