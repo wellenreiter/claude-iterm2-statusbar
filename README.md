@@ -120,6 +120,24 @@ All rendering is in `claude_statusbar.py`:
 
 ---
 
+## Make the components win the width fight (priority)
+
+In a narrow pane the Claude components can still get squeezed out (Gotcha #2).
+Priority, compression resistance and minimum width are per-component **profile
+knobs** — not settable from the script or the Python API. `set-priority.py`
+sets them so the Claude components are kept before CPU/RAM/clock:
+
+```sh
+# iTerm2 rewrites prefs on quit, so do this with it CLOSED:
+# 1. Quit iTerm2 (Cmd-Q)
+# 2. From Terminal.app (not iTerm2):
+python3 set-priority.py
+# 3. Reopen iTerm2
+```
+
+Tradeoff: in a tight pane the Claude components now win, so CPU/RAM/clock get
+squeezed instead.
+
 ## Troubleshooting
 
 **Nothing shows.** Check the boot log — the script writes it on every start:
@@ -162,6 +180,7 @@ ITERM2_COOKIE="$COOKIE" $PYBIN ~/Library/Application\ Support/iTerm2/Scripts/Aut
 | `claude_statusbar.py` | iTerm2 AutoLaunch script — registers the 3 components |
 | `statusline-cache-snippet.sh` | Paste into an existing statusLine to write the cache |
 | `statusline-command.example.sh` | Complete minimal statusLine if you don't have one |
+| `set-priority.py` | Raise the Claude components' priority so they aren't squeezed out (run with iTerm2 closed) |
 
 ## License
 
