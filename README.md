@@ -4,7 +4,7 @@ Show your **Claude Code** state in the **iTerm2 status bar** — live rate-limit
 usage, the active model, and the reasoning effort:
 
 ```
-5h 🟢 2% · 7d 🟢 7%      🤖 Opus 4.8      🧠 X-High
+5h 🟢 2% (11:40) · 7d 🟢 7% (So 14:00)      🤖 Opus 4.8      🧠 X-High
 ```
 
 Three small, independent components. Color comes from emoji (🟢🟡🔴 by usage), so

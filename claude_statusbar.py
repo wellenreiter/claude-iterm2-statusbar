@@ -61,9 +61,19 @@ def render_limits():
         return "Claude —"
     parts = []
     if p5 is not None:
-        parts.append(f"5h {circle(int(p5))} {int(p5)}%")
+        r5 = d.get("limit_5h_reset") or ""
+        s = f"5h {circle(int(p5))} {int(p5)}%"
+        if r5:
+            s += f" ({r5})"
+        parts.append(s)
     if p7 is not None:
-        parts.append(f"7d {circle(int(p7))} {int(p7)}%")
+        day = (d.get("limit_7d_day") or "")[:2]
+        r7 = d.get("limit_7d_reset") or ""
+        when = " ".join(x for x in (day, r7) if x)
+        s = f"7d {circle(int(p7))} {int(p7)}%"
+        if when:
+            s += f" ({when})"
+        parts.append(s)
     return " · ".join(parts)
 
 
@@ -95,7 +105,7 @@ async def main(connection):
 
     specs = [
         ("Claude Limits", "Claude 5h/7d rate-limit usage",
-         "5h 🟡 70% · 7d 🟢 6%", "com.pmi.claude.ratelimits", render_limits),
+         "5h 🟡 70% (11:40) · 7d 🟢 6% (So 14:00)", "com.pmi.claude.ratelimits", render_limits),
         ("Claude Model", "Active Claude model",
          "🤖 Opus 4.8", "com.pmi.claude.model", render_model),
         ("Claude Effort", "Active reasoning effort",
