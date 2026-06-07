@@ -112,6 +112,13 @@ its contents into your own statusLine script (anywhere after you read stdin into
 
 > Not sure which profile is active? Run `echo $ITERM_PROFILE` in iTerm2.
 
+> 💡 **Tip — this makes a huge difference for width.** In the *Configure Status Bar*
+> dialog click **Advanced…** (bottom right) and tick **“Prefer tight packing to
+> stable positioning.”** Components then size to their actual content instead of
+> reserving wide, stable slots — no more giant gaps, and the built-in components
+> keep their space. This alone usually fixes "my components are too wide"; Step 7 /
+> `set-priority.py` is then only needed to stop them vanishing in very narrow panes.
+
 ### 6. Cold-restart iTerm2 — **don't skip this**
 
 Quit iTerm2 completely (**⌘Q**) and reopen it. This is required (see *Gotcha 1*).
@@ -183,8 +190,10 @@ a callback name they collide and all render the first one's value. Already fixed
 the rendering.
 
 **4. Components are super-wide and squeeze CPU/RAM out.**
-Priority too high. `set-priority.py` is balanced (priority 6 / compression 1) so the
-components size to their content like the built-in ones. Re-run it (Step 7).
+Easy fix first: *Configure Status Bar → **Advanced…** → enable “Prefer tight packing
+to stable positioning.”* That alone usually fixes the wasted width. If they're still
+too aggressive, `set-priority.py` is balanced (priority 6 / compression 1) so they
+size to their content like the built-in ones — re-run it (Step 7).
 
 ### The macOS "iTerm.app wants to access data from other apps" prompt
 
